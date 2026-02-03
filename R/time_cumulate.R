@@ -9,7 +9,6 @@
 #' otherwise the value for 2010 is the sum of 2005 - 2009
 #' @export
 time_cumulate <- function(x, includeEndYear = FALSE) {
-
   if (any(is.na(x))) {
     warning("The magpie object contains NAs. This might lead to unexpected results.")
   }
@@ -23,11 +22,11 @@ time_cumulate <- function(x, includeEndYear = FALSE) {
   if (includeEndYear) {
     tmp[, 1, ] <- x[, 1, ]
     for (ts in 2:length(years)) {
-      tmp[, ts, ] <- tmp[ts - 1] + dimSums(xInt[, seq(years[ts - 1] + 1, years[ts], 1), ], dim = 2)
+      tmp[, ts, ] <- tmp[, ts - 1, ] + dimSums(xInt[, seq(years[ts - 1] + 1, years[ts], 1), ], dim = 2)
     }
   } else {
     for (ts in 2:length(years)) {
-      tmp[, ts, ] <- tmp[ts - 1] + dimSums(xInt[, seq(years[ts - 1], years[ts] - 1, 1), ], dim = 2)
+      tmp[, ts, ] <- tmp[, ts - 1, ] + dimSums(xInt[, seq(years[ts - 1], years[ts] - 1, 1), ], dim = 2)
     }
   }
 
