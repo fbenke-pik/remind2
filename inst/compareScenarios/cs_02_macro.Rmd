@@ -73,7 +73,7 @@ showLinePlots(data, "Capital Stock|Non-ESM")
 ## Investments
 
 ```{r Investments}
-showLinePlots(data, "Investments|Non-ESM")
+showLinePlots(data, "Investments|Macroeconomy")
 ```
 
 

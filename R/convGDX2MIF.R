@@ -64,8 +64,8 @@ convGDX2MIF <- function(gdx, gdx_ref = NULL, file = NULL, scenario = "default",
   # output <- mbind(output,reportLCOE(gdx)[,t,])
   message("running reportCapitalStock...")
   output <- mbind(output, reportCapitalStock(gdx, regionSubsetList, t, gdx_ref = gdx_ref)[, t, ])
-  message("running reportEnergyInvestment...")
-  output <- mbind(output, reportEnergyInvestment(gdx, regionSubsetList, t, gdx_ref = gdx_ref)[, t, ])
+  message("running reportInvestments")
+  output <- mbind(output, reportInvestments(gdx, regionSubsetList, t, gdx_ref = gdx_ref)[, t, ])
 
   # reporting of variables that need variables from different other report functions
   ## Ensure backwards compatibility for release version 3.5.2 (will be removed with 3.6.0)
@@ -106,7 +106,7 @@ convGDX2MIF <- function(gdx, gdx_ref = NULL, file = NULL, scenario = "default",
   output <- mbind(output, reportPrices(gdx, output, regionSubsetList, t, gdx_ref = gdx_ref)[, t, ])
 
   message("running reportCosts...")
-  # needs output from reportEnergyInvestment, reportPrices, reportEnergyInvestments
+  # needs output from reportExtraction, reportInvestments, reportPrices
   output <- mbind(output, reportCosts(gdx, output, regionSubsetList, t)[, t, ])
 
   message("running reportTax...")
