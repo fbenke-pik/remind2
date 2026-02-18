@@ -40,13 +40,45 @@ reportInvestments <- function(gdx,
   ttot <- gdx::readGDX(gdx, "ttot") |> as.numeric()
   cm_startyear <- gdx::readGDX(gdx, "cm_startyear") |> as.integer()
 
-  vm_invMacro <- modifyInvestmentVariables(vm_invMacro[, ttot, ], ref = gdx_ref, startYear = cm_startyear)
-  v01_invMacroAdj <- modifyInvestmentVariables(v01_invMacroAdj[, ttot, ], ref = gdx_ref, startYear = cm_startyear)
-  v_costInv <- modifyInvestmentVariables(v_costInv[, ttot, ], ref = gdx_ref, startYear = cm_startyear)
-  vm_costInvTeDir <- modifyInvestmentVariables(vm_costInvTeDir[, ttot, ], ref = gdx_ref, startYear = cm_startyear)
-  vm_costInvTeAdj <- modifyInvestmentVariables(vm_costInvTeAdj[, ttot, ], ref = gdx_ref, startYear = cm_startyear)
-  vm_costAddTeInv <- modifyInvestmentVariables(vm_costAddTeInv[, ttot, ], ref = gdx_ref, startYear = cm_startyear)
-  vm_costCESMkup <- modifyInvestmentVariables(vm_costCESMkup[, ttot, ], ref = gdx_ref, startYear = cm_startyear)
+  if (!is.null(gdx_ref)) {
+    vm_invMacro_ref <- gdx::readGDX(gdx_ref, "vm_invMacro", field = "l")[, ttot, ]
+    v01_invMacroAdj_ref <- gdx::readGDX(gdx_ref, "v01_invMacroAdj", field = "l")[, ttot, ]
+    v_costInv_ref <- gdx::readGDX(gdx_ref, "v_costInv", field = "l")[, ttot, ]
+    vm_costInvTeDir_ref <- gdx::readGDX(gdx_ref, "vm_costInvTeDir", field = "l")[, ttot, ]
+    vm_costInvTeAdj_ref <- gdx::readGDX(gdx_ref, "vm_costInvTeAdj", field = "l")[, ttot, ]
+    vm_costAddTeInv_ref <- gdx::readGDX(gdx_ref, "vm_costAddTeInv", field = "l")[, ttot, ]
+    vm_costCESMkup_ref <- gdx::readGDX(gdx_ref, "vm_costCESMkup", field = "l")[, ttot, ]
+  } else {
+    vm_invMacro_ref <- NULL
+    v01_invMacroAdj_ref <- NULL
+    v_costInv_ref <- NULL
+    vm_costInvTeDir_ref <- NULL
+    vm_costInvTeAdj_ref <- NULL
+    vm_costAddTeInv_ref <- NULL
+    vm_costCESMkup_ref <- NULL
+  }
+
+  vm_invMacro <- modifyInvestmentVariables(vm_invMacro[, ttot, ],
+                                           ref = vm_invMacro_ref,
+                                           startYear = cm_startyear)
+  v01_invMacroAdj <- modifyInvestmentVariables(v01_invMacroAdj[, ttot, ],
+                                               ref = v01_invMacroAdj_ref,
+                                               startYear = cm_startyear)
+  v_costInv <- modifyInvestmentVariables(v_costInv[, ttot, ],
+                                         ref = v_costInv_ref,
+                                         startYear = cm_startyear)
+  vm_costInvTeDir <- modifyInvestmentVariables(vm_costInvTeDir[, ttot, ],
+                                               ref = vm_costInvTeDir_ref,
+                                               startYear = cm_startyear)
+  vm_costInvTeAdj <- modifyInvestmentVariables(vm_costInvTeAdj[, ttot, ],
+                                               ref = vm_costInvTeAdj_ref,
+                                               startYear = cm_startyear)
+  vm_costAddTeInv <- modifyInvestmentVariables(vm_costAddTeInv[, ttot, ],
+                                               ref = vm_costAddTeInv_ref,
+                                               startYear = cm_startyear)
+  vm_costCESMkup <- modifyInvestmentVariables(vm_costCESMkup[, ttot, ],
+                                              ref = vm_costCESMkup_ref,
+                                              startYear = cm_startyear)
 
   # Load in sets used to filter the investment variables
   ppfKap <- gdx::readGDX(gdx, "ppfKap") |> as.character()
