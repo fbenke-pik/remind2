@@ -126,6 +126,11 @@ reportEmi <- function(gdx, output = NULL, regionSubsetList = NULL,
   vm_demPE <- readGDX(gdx, "vm_demPE", field = "l", restore_zeros = FALSE)[, t, ]
   # final energy demand (se2fe emissions factors applied to)
   vm_demFeSector <- readGDX(gdx, "vm_demFeSector", field = "l", restore_zeros = FALSE)[, t, ]
+
+  ## Ensure backwards compatibility for release version 3.6.0 (can be removed with 3.7.0)
+  getNames(vm_demFeSector, dim = 3) <- tolower(getNames(vm_demFeSector, dim = 3))
+  ## End backwards compatibility
+
   # set NA values to 0,
   vm_demFeSector[is.na(vm_demFeSector)] <- 0
   # FE demand per industry subsector
@@ -713,9 +718,14 @@ reportEmi <- function(gdx, output = NULL, regionSubsetList = NULL,
     all_enty1 = getItems(pm_emifac.co2.fe, dim = "all_enty1", full = TRUE)
   ) %>%
     left_join(entyFe2Sector, by = "all_enty1", relationship = "many-to-many") %>%
-    left_join(sector2emiMkt, by = "emi_sectors", relationship = "many-to-many") %>%
-    mutate(name = paste(all_enty, all_enty1, emi_sectors, all_emiMkt, sep = "."))
+    left_join(sector2emiMkt, by = "emi_sectors", relationship = "many-to-many")
 
+  ## Ensure backwards compatibility for release version 3.6.0 (can be removed with 3.7.0)
+  emi.map.fe[,"emi_sectors"] <- tolower(emi.map.fe[,"emi_sectors"])
+  ## End backwards compatibility
+
+  emi.map.fe <- emi.map.fe %>%
+    mutate(name = paste(all_enty, all_enty1, emi_sectors, all_emiMkt, sep = "."))
 
   # calculate captured CO2 per pe2se technology
   sel_pm_emifac_pe2seCCO2 <- if (getSets(pm_emifac)[[6]] == "emiAll") {
@@ -946,7 +956,7 @@ reportEmi <- function(gdx, output = NULL, regionSubsetList = NULL,
     ),
     # cdr energy requirement emissions: fe carrier emissions subtracting captured and stored emissions
     setNames(
-      (dimSums(EmiFeCarrier[, , "CDR"], dim = 3)
+      (dimSums(EmiFeCarrier[, , "cdr"], dim = 3)
       - sm_capture_rate_cdrmodule * dimSums(vm_co2emi_cdrFE_beforeCapture, dim = 3) * p_share_CCS)
       * GtC_2_MtCO2,
       "Emi|CO2|Energy|Demand|+|CDR Sector (Mt CO2/yr)"
@@ -1058,11 +1068,11 @@ reportEmi <- function(gdx, output = NULL, regionSubsetList = NULL,
     ),
     # CDR
     setNames(
-      (dimSums(mselect(EmiFeCarrier, all_enty1 = c("fedie"), emi_sectors = "CDR"), dim = 3)) * GtC_2_MtCO2,
+      (dimSums(mselect(EmiFeCarrier, all_enty1 = c("fedie"), emi_sectors = "cdr"), dim = 3)) * GtC_2_MtCO2,
       "Emi|CO2|Energy|Demand|CDR Sector|+|Liquids (Mt CO2/yr)"
     ),
     setNames(
-      (dimSums(mselect(EmiFeCarrier, all_enty1 = c("fegas"), emi_sectors = "CDR"), dim = 3)
+      (dimSums(mselect(EmiFeCarrier, all_enty1 = c("fegas"), emi_sectors = "cdr"), dim = 3)
       - sm_capture_rate_cdrmodule * dimSums(vm_co2emi_cdrFE_beforeCapture, dim = 3) * p_share_CCS) * GtC_2_MtCO2,
       "Emi|CO2|Energy|Demand|CDR Sector|+|Gases (Mt CO2/yr)"
     )
@@ -1780,7 +1790,7 @@ reportEmi <- function(gdx, output = NULL, regionSubsetList = NULL,
   )
 
 
-  vm_demFeSector_CDR <- mselect(mselect(vm_demFeSector_woNonEn, all_enty1 = "fegas"), emi_sectors = "CDR")
+  vm_demFeSector_CDR <- mselect(mselect(vm_demFeSector_woNonEn, all_enty1 = "fegas"), emi_sectors = "cdr")
   vm_demFeSector_CDR_totalfegas <- dimSums(vm_demFeSector_CDR, dim = 3)
   # replace zeros by -1 to avoid division by zero if no fegas is used
   vm_demFeSector_CDR_totalfegas[vm_demFeSector_CDR_totalfegas == 0] <- -1
