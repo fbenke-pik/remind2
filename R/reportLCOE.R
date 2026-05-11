@@ -68,9 +68,9 @@ reportLCOE <- function(gdx, output.type = "both") {
 
   ## Ensure backwards compatibility for release version 3.6.0 (can be removed with 3.7.0)
   if ("CCU" %in% module2realisation$modules) {
-    CCU_mod <- module2realisation[module2realisation$modules == "CCU", 2]
+    ccuRealization <- module2realisation[module2realisation$modules == "CCU", 2]
   } else {
-    CCU_mod <- module2realisation[module2realisation$modules == "carbonUtilization", 2]
+    ccuRealization <- module2realisation[module2realisation$modules == "carbonUtilization", 2]
   }
 
   rownames(module2realisation) <- module2realisation$modules
@@ -1215,7 +1215,7 @@ reportLCOE <- function(gdx, output.type = "both") {
 
 
     # CO2 required per unit output (for CCU technologies)
-    if (CCU_mod == "on") {
+    if (ccuRealization == "on") {
       p39_co2_dem <- readGDX(gdx, c("p39_co2_dem", "p39_ratioCtoH"), restore_zeros = FALSE)[, , ]
     } else {
       # some dummy data, only needed to create the following data frame if CCU is off
@@ -1427,7 +1427,7 @@ reportLCOE <- function(gdx, output.type = "both") {
       left_join(df.emiFac, by = c("region", "tech")) %>%
       left_join(df.emifac.se2fe, by = c("region", "tech")) %>%
       left_join(df.Co2.Capt.Price, by = c("region", "period")) %>%
-      left_join(df.co2_dem, by = c("region", "period", if (CCU_mod == "on") "tech")) %>%
+      left_join(df.co2_dem, by = c("region", "period", if (ccuRealization == "on") "tech")) %>%
       left_join(df.CO2StoreShare, by = c("region", "period")) %>%
       left_join(df.secfuel, by = c("region", "period", "tech", "fuel")) %>%
       left_join(df.curtShare, by = c("region", "period", "tech")) %>%
