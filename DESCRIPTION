@@ -55,7 +55,6 @@ Imports:
     data.table,
     dplyr (>= 1.1.1),
     GDPuc,
-    gdx (>= 1.53.0),
     gdxrrw,
     ggplot2,
     gms,
