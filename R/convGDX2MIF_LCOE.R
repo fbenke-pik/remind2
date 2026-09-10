@@ -18,7 +18,6 @@
 #' }
 #'
 #' @export
-#' @importFrom gdx readGDX
 #' @importFrom magclass mbind write.report
 #' @importFrom utils write.table
 

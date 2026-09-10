@@ -20,9 +20,8 @@
 #' @export
 #' @importFrom gdx readGDX
 #' @importFrom magclass new.magpie mselect getRegions getYears mbind setNames getNames<- as.data.frame as.magpie getSets
-#' @importFrom dplyr %>% filter full_join group_by left_join mutate rename select semi_join summarize ungroup
+#' @importFrom dplyr filter full_join group_by left_join mutate rename select semi_join summarize ungroup
 #' @importFrom quitte inline.data.frame revalue.levels
-#' @importFrom rlang syms
 #' @importFrom tibble as_tibble tibble tribble
 #' @importFrom tidyr complete crossing expand_grid replace_na
 #' @importFrom utils tail

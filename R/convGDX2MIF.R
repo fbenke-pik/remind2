@@ -23,7 +23,7 @@
 #' }
 #'
 #' @export
-#' @importFrom dplyr %>% bind_rows filter
+#' @importFrom dplyr bind_rows filter
 #' @importFrom gdx readGDX
 #' @importFrom magclass mbind write.report
 #' @importFrom piamInterfaces checkSummations checkVarNames

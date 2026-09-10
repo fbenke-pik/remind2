@@ -21,7 +21,6 @@
 #' }
 #'
 #' @export
-#' @importFrom rlang .data
 #' @importFrom magclass mbind getYears collapseNames setNames
 #' @importFrom gdx readGDX
 #' @importFrom dplyr filter
@@ -424,20 +423,20 @@ reportCosts <- function(gdx,
   cost1 <- op_costs(ei = temapall$all_enty, eo = sety, te = teall2rlf$all_te, e2e = temapall, teall2rlf = teall2rlf, vm_prodE = vm_prodSe, pm_data = pm_data, vm_cap = vm_cap, v_investcost = v_investcost)
   cost2 <- op_costs(ei = temapall$all_enty, eo = fety, te = teall2rlf$all_te, e2e = temapall, teall2rlf = teall2rlf, vm_prodE = vm_prodFe, pm_data = pm_data, vm_cap = vm_cap, v_investcost = v_investcost)
   cost3 <- op_costs(ei = NULL, eo = NULL, te = tenotransform, e2e = NULL, teall2rlf = teall2rlf, vm_prodE = NULL, pm_data = pm_data, vm_cap = vm_cap, v_investcost = v_investcost)
-  tmp <- mbind(tmp, setNames(cost1 + cost2 + cost3 + output[regi_on_gdx, , "Investment|Energy Supply (billion US$2017/yr)"], 
+  tmp <- mbind(tmp, setNames(cost1 + cost2 + cost3 + output[regi_on_gdx, , "Investment|Energy Supply (billion US$2017/yr)"],
                              "Total Energy costs (billion US$2017/yr)"))
 
   ##### Electricity|Fossil
   cost <- op_costs(ei = petyf, eo = "seel", te = pe2se$all_te, e2e = pe2se, teall2rlf = teall2rlf, vm_prodE = vm_prodSe, pm_data = pm_data, vm_cap = vm_cap, v_investcost = v_investcost)
   tmp <- mbind(tmp, setNames(
-    cost + output[regi_on_gdx, , "Investment|Energy Supply|Electricity|Fossil (billion US$2017/yr)"], 
+    cost + output[regi_on_gdx, , "Investment|Energy Supply|Electricity|Fossil (billion US$2017/yr)"],
     "Total Energy costs|Electricity|Fossil (billion US$2017/yr)"
   ))
 
   ##### Electricity|Non-fossil
   cost <- op_costs(ei = setdiff(pe2se$all_enty, petyf), eo = "seel", te = pe2se$all_te, e2e = pe2se, teall2rlf = teall2rlf, vm_prodE = vm_prodSe, pm_data = pm_data, vm_cap = vm_cap, v_investcost = v_investcost)
   tmp <- mbind(tmp, setNames(
-    cost + output[regi_on_gdx, , "Investment|Energy Supply|Electricity|Non-Fossil (billion US$2017/yr)"], 
+    cost + output[regi_on_gdx, , "Investment|Energy Supply|Electricity|Non-Fossil (billion US$2017/yr)"],
     "Total Energy costs|Electricity|Non-Fossil (billion US$2017/yr)"
   ))
 

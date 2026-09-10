@@ -19,10 +19,8 @@
 #' }
 #'
 #' @export
-#' @importFrom gdx readGDX
 #' @importFrom magclass mselect getSets getSets<- getYears getNames<- mbind
 #' @importFrom abind abind
-#' @importFrom rlang sym
 
 reportSE <- function(gdx, regionSubsetList = NULL, t = c(seq(2005, 2060, 5), seq(2070, 2110, 10), 2130, 2150)) {
   ####### get realisations #########

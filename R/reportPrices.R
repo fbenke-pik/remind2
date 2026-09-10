@@ -24,7 +24,7 @@
 #' reportPrices(gdx)
 #' }
 #'
-#' @importFrom dplyr %>% case_when distinct filter inner_join tibble left_join rename
+#' @importFrom dplyr case_when distinct filter inner_join tibble left_join rename
 #' @importFrom gdx readGDX
 #' @importFrom magclass mbind getYears getRegions setNames dimExists new.magpie lowpass
 #' @importFrom magclass complete_magpie getItems<- getNames unitsplit unitjoin

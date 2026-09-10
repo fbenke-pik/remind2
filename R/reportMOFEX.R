@@ -13,7 +13,6 @@
 #' }
 #'
 #' @export
-#' @importFrom rlang .data
 #' @importFrom magclass mbind getYears collapseNames setNames mselect as.magpie write.report
 #' @importFrom gdx readGDX
 #' @importFrom dplyr filter

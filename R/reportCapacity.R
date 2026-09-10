@@ -25,7 +25,7 @@
 #' @export
 #' @importFrom gdx readGDX
 #' @importFrom magclass mbind setNames getSets getSets<- as.magpie
-#' @importFrom dplyr %>% filter mutate
+#' @importFrom dplyr filter mutate
 
 reportCapacity <- function(gdx, regionSubsetList = NULL,
                            t = c(seq(2005, 2060, 5), seq(2070, 2110, 10), 2130, 2150),
@@ -111,12 +111,12 @@ reportCapacity <- function(gdx, regionSubsetList = NULL,
       get_cap(c("igcc", "pc", "coalchp", "igccc"), "|Electricity|+|Coal"),
       get_cap("dot",                               "|Electricity|+|Oil"),
       get_cap(c("ngcc", "ngt", "gaschp", "ngccc"), "|Electricity|+|Gas"),
-      setNames(  dimSums(gms_data[, , c("bioigccc", "biochp", "bioigcc")], dim = 3) 
-               + dimSums(gms_data[, , c("biopyrchp")] * prodCouple[, , "pebiolc.sebiochar.biopyrchp.seel"], dim = 3, na.rm = TRUE), 
-        full_name(                                 "|Electricity|+|Biomass")), 
+      setNames(  dimSums(gms_data[, , c("bioigccc", "biochp", "bioigcc")], dim = 3)
+               + dimSums(gms_data[, , c("biopyrchp")] * prodCouple[, , "pebiolc.sebiochar.biopyrchp.seel"], dim = 3, na.rm = TRUE),
+        full_name(                                 "|Electricity|+|Biomass")),
       get_cap(c("tnrs", "fnrs"),                   "|Electricity|+|Nuclear")
     )
-  
+
     if (all(c("h2turbVRE", "h2turb") %in% magclass::getNames(gms_data, dim = 1))) {
       cap_electricity <- mbind(cap_electricity, get_cap(c("h2turb", "h2turbVRE"), "|Electricity|+|Hydrogen"))
     }
@@ -143,8 +143,8 @@ reportCapacity <- function(gdx, regionSubsetList = NULL,
       get_cap("gaschp",                         "|Electricity|Gas|CHP"),
       get_cap("ngt",                            "|Electricity|Gas|GT"),
       get_cap(c("bioigccc"),                    "|Electricity|Biomass|w/ CC"),
-      setNames(  dimSums(gms_data[, , c("biochp", "bioigcc")], dim = 3) 
-               + dimSums(gms_data[, , c("biopyrchp")] * prodCouple[, , "pebiolc.sebiochar.biopyrchp.seel"], dim = 3, na.rm = TRUE), 
+      setNames(  dimSums(gms_data[, , c("biochp", "bioigcc")], dim = 3)
+               + dimSums(gms_data[, , c("biopyrchp")] * prodCouple[, , "pebiolc.sebiochar.biopyrchp.seel"], dim = 3, na.rm = TRUE),
         full_name(                              "|Electricity|Biomass|w/o CC")),
       get_cap("biochp",                         "|Electricity|Biomass|CHP"),
       get_cap(c("biochp", "gaschp", "coalchp"), "|Electricity|CHP"),
@@ -192,7 +192,7 @@ reportCapacity <- function(gdx, regionSubsetList = NULL,
       setNames(  dimSums(gms_data[, , c("coalhp")], dim = 3)
                + dimSums(gms_data[, , c("coalchp")] * prodCouple[, , "pecoal.seel.coalchp.sehe"], dim = 3, na.rm = TRUE),
         full_name(     "|Heat|+|Coal")),
-      setNames(  dimSums(gms_data[, , c("biohp")], dim = 3) 
+      setNames(  dimSums(gms_data[, , c("biohp")], dim = 3)
                + dimSums(gms_data[, , c("biochp")] * prodCouple[, , "pebiolc.seel.biochp.sehe"], dim = 3, na.rm = TRUE)
                + dimSums(gms_data[, , c("biopyrhe")] * prodCouple[, , "pebiolc.sebiochar.biopyrhe.sehe"], dim = 3, na.rm = TRUE)
                + dimSums(gms_data[, , c("biopyrchp")] * prodCouple[, , "pebiolc.sebiochar.biopyrchp.sehe"], dim = 3, na.rm = TRUE),
@@ -223,7 +223,7 @@ reportCapacity <- function(gdx, regionSubsetList = NULL,
       get_cap(c("refliq"),                  "|Liquids|+|Oil"),
       get_cap(c("gasftrec", "gasftcrec"),   "|Liquids|+|Gas"),
       setNames(  dimSums(gms_data[, , c("bioftrec", "bioftcrec", "biodiesel", "bioeths", "bioethl")], dim = 3)
-               + dimSums(gms_data[, , c("biopyrliq")] * prodCouple[, , "pebiolc.sebiochar.biopyrliq.seliqbio"], dim = 3, na.rm = TRUE), 
+               + dimSums(gms_data[, , c("biopyrliq")] * prodCouple[, , "pebiolc.sebiochar.biopyrliq.seliqbio"], dim = 3, na.rm = TRUE),
         full_name(                          "|Liquids|+|Biomass")),
       get_cap(c("MeOH"),                    "|Liquids|+|Hydrogen")
     )
@@ -239,7 +239,7 @@ reportCapacity <- function(gdx, regionSubsetList = NULL,
       get_cap(c("biotr", "biotrmod"), "|Solids|+|Biomass")
     )
     cap_solids <- mbind(cap_solids, setNames(dimSums(cap_solids, dim = 3), full_name("|Solids"))) # sum of the above
-    
+
     # biochar
     s_tBC_2_TWa <- readGDX(gdx, name = "sm_tBC_2_TWa", format = "first_found", react = "silent") # Biochar calorific value
     factor_biochar <- 1 / (s_tBC_2_TWa * 10^6 * 10^3) # convert from GWa to Mt Biochar: 1 / ([TWa/t BC] * 10^6 [t BC/ Mt BC] * 10^3 [GW/TW]) = 1 / [GWa/MtBC] = [Mt BC/ GWa]
@@ -247,7 +247,7 @@ reportCapacity <- function(gdx, regionSubsetList = NULL,
     cap_biochar <- setNames(
       dimSums(gms_data[, , c("biopyronly", "biopyrhe", "biopyrchp", "biopyrliq")], dim = 3) * factor_biochar,
       paste0(prefix,"|Biochar", unit_biochar))
-    
+
     reported_cap <- mbind(cap_electricity, cap_storage, cap_hydrogen, cap_heat, cap_gas, cap_liquids, cap_solids, cap_biochar)
 
     # carbon management
