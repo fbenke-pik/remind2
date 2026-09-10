@@ -55,10 +55,6 @@ reportTax <- function(gdx, output = NULL, regionSubsetList = NULL, t = c(seq(200
   )[, t, ] * TWa_2_EJ
   vm_demFeSector[is.na(vm_demFeSector)] <- 0
 
-  ## Ensure backwards compatibility for release version 3.6.0 (can be removed with 3.7.0)
-  getNames(vm_demFeSector, dim = 3) <- tolower(getNames(vm_demFeSector, dim = 3))
-  ## End backwards compatibility
-
   commonFinalEnergyVariables <- c(
     Solids      = "fesos",
     Liquids     = "fehos",

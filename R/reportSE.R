@@ -57,11 +57,6 @@ reportSE <- function(gdx, regionSubsetList = NULL, t = c(seq(2005, 2060, 5), seq
   seGas <- intersect(c("segafos", "segabio", "segasyn"), entySe)
   seSol <- intersect(c("sesofos", "sesobio"), entySe)
 
-  # necessary to avoid errors for versions having only a single CCS injection technology; to be removed with release 3.6.0
-  if (is.null(teccsinje)) {
-    teccsinje <- "ccsinje"
-  }
-
   ## variables
   prodSE <- gdx2::readGDX(gdx,
     name = "vm_prodSe", select = list("_field" = "level"),
@@ -391,10 +386,6 @@ reportSE <- function(gdx, regionSubsetList = NULL, t = c(seq(2005, 2060, 5), seq
   vm_demFeSector <- gdx2::readGDX(gdx, "vm_demFeSector", select = list("_field" = "level"),
                                   restoreZeros = FALSE, uniqueStyle = "classic")[, y, ] * TWa_2_EJ
   vm_demFeSector[is.na(vm_demFeSector)] <- 0
-
-  ## Ensure backwards compatibility for release version 3.6.0 (can be removed with 3.7.0)
-  getNames(vm_demFeSector, dim = 3) <- tolower(getNames(vm_demFeSector, dim = 3))
-  ## End backwards compatibility
 
   # SE demand
   vm_demSe <- gdx2::readGDX(gdx, "vm_demSe", select = list("_field" = "level"),

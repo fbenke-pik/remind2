@@ -374,18 +374,6 @@ reportPrices <- function(gdx, output = NULL, regionSubsetList = NULL,
       )
     )
 
-    ## Ensure backwards compatibility for release version 3.6.0 (can be removed with 3.7.0)
-
-    if ("CDR" %in% se.fe.sector.emiMkt$sector) {
-      varName[["sector"]] <- c(
-        indst = "Industry",
-        build = "Buildings",
-        trans = "Transport",
-        CDR = "CDR"
-      )
-    }
-    ## End backwards compatibility
-
     ## add rawdata price variables, calculated from marginals, to the reporting
     addVar <- function(input, var, namevector, fe, se, sector, emiMkt) { # function to add only variables if they were not saved already
       name <- paste0("Price|Final Energy|", paste(namevector, collapse = "|"), " (US$2017/GJ)")
@@ -1127,12 +1115,7 @@ reportPrices <- function(gdx, output = NULL, regionSubsetList = NULL,
   for (i in getRegions(out)) glob_price[i, , ] <- pm_pvp[, , "pebiolc"] / pm_pvp[, , "good"] * tdptwyr2dpgj
   out <- mbind(out, setNames(glob_price,                                       "Price|Biomass|World Market (US$2017/GJ)"))
 
-  if (!is.null(s_tBC_2_TWa)){  # for backwards compatibility, to be removed with v360 (TD)
-    for (i in getRegions(out)) glob_price[i, , ] <- p33_BiocharPrice * s_tBC_2_TWa * sm_trillion_2_non # [trilUS$2017/TWa BC] * [TWa/t BC] * [TrilUSD/USD]
-    out <- mbind(out, setNames(glob_price,                              "Price|Biochar (US$2017/t Biochar)"))
-  } else {
-    out <- mbind(out, new.magpie(getRegions(out), getYears(out), "Price|Biochar (US$2017/t Biochar)", fill = NA))
-  }
+  out <- mbind(out, new.magpie(getRegions(out), getYears(out), "Price|Biochar (US$2017/t Biochar)", fill = NA))
 
   ## special global prices
 

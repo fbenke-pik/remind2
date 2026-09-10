@@ -127,10 +127,6 @@ reportEmi <- function(gdx, output = NULL, regionSubsetList = NULL,
   # final energy demand (se2fe emissions factors applied to)
   vm_demFeSector <- readGDX(gdx, "vm_demFeSector", field = "l", restore_zeros = FALSE)[, t, ]
 
-  ## Ensure backwards compatibility for release version 3.6.0 (can be removed with 3.7.0)
-  getNames(vm_demFeSector, dim = 3) <- tolower(getNames(vm_demFeSector, dim = 3))
-  ## End backwards compatibility
-
   # set NA values to 0,
   vm_demFeSector[is.na(vm_demFeSector)] <- 0
   # FE demand per industry subsector
@@ -724,10 +720,6 @@ reportEmi <- function(gdx, output = NULL, regionSubsetList = NULL,
   ) %>%
     left_join(entyFe2Sector, by = "all_enty1", relationship = "many-to-many") %>%
     left_join(sector2emiMkt, by = "emi_sectors", relationship = "many-to-many")
-
-  ## Ensure backwards compatibility for release version 3.6.0 (can be removed with 3.7.0)
-  emi.map.fe[,"emi_sectors"] <- tolower(emi.map.fe[,"emi_sectors"])
-  ## End backwards compatibility
 
   emi.map.fe <- emi.map.fe %>%
     mutate(name = paste(all_enty, all_enty1, emi_sectors, all_emiMkt, sep = "."))

@@ -66,12 +66,7 @@ reportLCOE <- function(gdx, output.type = "both") {
   # get module realizations
   module2realisation <- readGDX(gdx, "module2realisation")
 
-  ## Ensure backwards compatibility for release version 3.6.0 (can be removed with 3.7.0)
-  if ("CCU" %in% module2realisation$modules) {
-    ccuRealization <- module2realisation[module2realisation$modules == "CCU", 2]
-  } else {
-    ccuRealization <- module2realisation[module2realisation$modules == "carbonUtilization", 2]
-  }
+  ccuRealization <- module2realisation[module2realisation$modules == "carbonUtilization", 2]
 
   rownames(module2realisation) <- module2realisation$modules
 
@@ -126,7 +121,6 @@ reportLCOE <- function(gdx, output.type = "both") {
     pe2se     <- readGDX(gdx, "pe2se")
     teCCS     <- readGDX(gdx, "teCCS") # capture technologies
     teccsinje <- readGDX(gdx, "teccsinje", react = "silent") # transport and storage technologies
-    teccsinje <- ifelse(is.null(teccsinje), "ccsinje", teccsinje) # necessary to avoid errors for versions having only a single CCS injection technology; to be removed with release 3.6.0
     teReNoBio <- readGDX(gdx, "teReNoBio")
     teCDR     <- readGDX(gdx, "te_used33")
     EW_name   <- "weathering" # necessary for backward compatibility
@@ -832,7 +826,6 @@ reportLCOE <- function(gdx, output.type = "both") {
     teGrid <- readGDX(gdx, "teGrid") # grid technologies for VREs
     ccs2te    <- readGDX(gdx, "ccs2te")    # ccs transport and storage technologies (mapping to other enty)
     teccsinje <- readGDX(gdx, "teccsinje", react = "silent") # ccs transport and storage technologies (technologies only)
-    teccsinje <- ifelse(is.null(teccsinje), "ccsinje", teccsinje) # necessary to avoid errors for versions having only a single CCS injection technology; to be removed with release 3.6.0
     teReNoBio <- readGDX(gdx, "teReNoBio") # renewable technologies without biomass
     teCCS <- readGDX(gdx, "teCCS") # ccs technologies
     teReNoBio <- c(teReNoBio) # renewables without biomass
@@ -1421,11 +1414,6 @@ reportLCOE <- function(gdx, output.type = "both") {
     pm_ccsinjecrate <- readGDX(gdx, "pm_ccsinjecrate", react = "silent")
     if (is.null(pm_ccsinjecrate)) pm_ccsinjecrate <- sm_ccsinjecrate
     pm_dataccs <- readGDX(gdx, "pm_dataccs", restore_zeros = FALSE)
-
-    # necessary to avoid errors for versions using the old input data that had a rlf dimension instead of a technology dimension; to be removed with release 3.6.0
-    if(!"ccsinjeon" %in% getNames(pm_dataccs, dim = 2)) {
-      pm_dataccs <- setNames(pm_dataccs, "quan.ccsinje")
-    }
 
     # calculate storage share of captured CO2,
     # for now take the storage share of the construction year of plant, it will not change much over time
