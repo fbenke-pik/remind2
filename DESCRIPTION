@@ -50,7 +50,6 @@ URL: https://github.com/pik-piam/remind2
 Depends:
     magclass (>= 6.17.2)
 Imports:
-    abind,
     assertr,
     data.table,
     dplyr (>= 1.1.1),
