@@ -37,11 +37,10 @@ reportEmiForClimateAssessment <- function(gdx, output = NULL, regionSubsetList =
 
   # sets required
   # mapping of MAC sectors to emissions sectors and gases
-  emiMac2sector <- gdx2::readGDX(gdx, "emiMac2sector", uniqueStyle = "classic", stringsAsFactors = FALSE) %>%
-    select(-"element_text")
+  emiMac2sector <- gdx2::readGDX(gdx, "emiMac2sector", uniqueStyle = "classic",
+                                 stringsAsFactors = FALSE)
   # mapping of MAC sectors to emissions markets
-  macSector2emiMkt <- gdx2::readGDX(gdx, "macSector2emiMkt", stringsAsFactors = FALSE)  %>%
-    select(-"element_text")
+  macSector2emiMkt <- gdx2::readGDX(gdx, "macSector2emiMkt", stringsAsFactors = FALSE)
 
   ### emissions variables from REMIND (see definitions in core/equations.gms)
   # total GHG emissions

@@ -32,9 +32,9 @@ reportPE <- function(gdx, regionSubsetList = NULL, t = c(seq(2005, 2060, 5), seq
   peFos    <- gdx2::readGDX(gdx, "peFos") # primary energy fossil fuels
   peBio    <- gdx2::readGDX(gdx, "peBio") # biomass primary energy types
   # map primary energy carriers to secondary
-  pe2se    <- gdx2::readGDX(gdx, "pe2se", uniqueStyle = "classic") %>% select(-"element_text")
+  pe2se    <- gdx2::readGDX(gdx, "pe2se", uniqueStyle = "classic", stringsAsFactors = FALSE)
   # prod couple: mapping for own consumption and co-production of technologies
-  pc2te    <- gdx2::readGDX(gdx, "pc2te", uniqueStyle = "classic", stringsAsFactors = FALSE) %>% select(-"element_text")
+  pc2te    <- gdx2::readGDX(gdx, "pc2te", uniqueStyle = "classic", stringsAsFactors = FALSE)
   pc2te    <- pc2te[(pc2te$all_enty1 %in% entySe) & (pc2te$all_enty2 %in% entySe), ] # ensure main and couple product are valid entySe
 
   seLiq    <- intersect(c("seliqfos", "seliqbio"), entySe)

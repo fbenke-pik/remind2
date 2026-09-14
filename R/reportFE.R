@@ -38,14 +38,12 @@ reportFE <- function(gdx, regionSubsetList = NULL,
   # ---- read in needed data
 
   # ---- sets
-  se2fe <- gdx2::readGDX(gdx, "se2fe", uniqueStyle = "classic", stringsAsFactors = FALSE) %>%
-    select(-"element_text")
-  entyFe2Sector <- gdx2::readGDX(gdx, "entyFe2Sector", stringsAsFactors = FALSE) %>%
-    select(-"element_text")
-  sector2emiMkt <- gdx2::readGDX(gdx, "sector2emiMkt", stringsAsFactors = FALSE) %>%
-    select(-"element_text")
+  se2fe <- gdx2::readGDX(gdx, "se2fe", uniqueStyle = "classic", stringsAsFactors = FALSE)
+  entyFe2Sector <- gdx2::readGDX(gdx, "entyFe2Sector", stringsAsFactors = FALSE)
+  sector2emiMkt <- gdx2::readGDX(gdx, "sector2emiMkt", stringsAsFactors = FALSE)
 
-  entyFe2sector2emiMkt_NonEn <- gdx2::readGDX(gdx, "entyFe2sector2emiMkt_NonEn", react = "silent")
+  entyFe2sector2emiMkt_NonEn <- gdx2::readGDX(gdx, "entyFe2sector2emiMkt_NonEn", stringsAsFactors = FALSE,
+                                              react = "silent")
   if (is.null(entySEfos <- gdx2::readGDX(gdx, "entySEfos", react = "silent"))) {
     entySEfos <- c("sesofos", "seliqfos", "segafos")
   }

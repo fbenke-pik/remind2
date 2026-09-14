@@ -57,33 +57,25 @@ reportEmi <- function(gdx, output = NULL, regionSubsetList = NULL,
 
   # sets required
   # pe2se conversions
-  pe2se <- gdx2::readGDX(gdx, "pe2se", uniqueStyle = "classic", stringsAsFactors = FALSE) %>%
-    select(-"element_text")
+  pe2se <- gdx2::readGDX(gdx, "pe2se", uniqueStyle = "classic", stringsAsFactors = FALSE)
   # se2fe conversions
-  se2fe <- gdx2::readGDX(gdx, "se2fe", uniqueStyle = "classic", stringsAsFactors = FALSE) %>%
-    select(-"element_text")
+  se2fe <- gdx2::readGDX(gdx, "se2fe", uniqueStyle = "classic", stringsAsFactors = FALSE)
   # energy-related industry CCS categories (excl. co2 cement CCS)
   emiInd37_fuel <- gdx2::readGDX(gdx, "emiInd37_fuel")
   # mapping of MAC sectors to emissions sectors and gases
   emiMac2sector <- gdx2::readGDX(gdx, "emiMac2sector", stringsAsFactors = FALSE,
-                                 uniqueStyle = "classic") %>%
-    select(-"element_text")
+                                 uniqueStyle = "classic")
   # mapping of MAC sectors to emissions markets
-  macSector2emiMkt <- gdx2::readGDX(gdx, "macSector2emiMkt", stringsAsFactors = FALSE) %>%
-    select(-"element_text")
+  macSector2emiMkt <- gdx2::readGDX(gdx, "macSector2emiMkt", stringsAsFactors = FALSE)
   # mapping of combination of FE to sectors which are actually used
-  entyFe2Sector <- gdx2::readGDX(gdx, "entyFe2Sector", stringsAsFactors = FALSE) %>%
-    select(-"element_text", "all_enty1" = "all_enty")
-
+  entyFe2Sector <- gdx2::readGDX(gdx, "entyFe2Sector", stringsAsFactors = FALSE)
   # mapping from sectors to markets
-  sector2emiMkt <- gdx2::readGDX(gdx, "sector2emiMkt", stringsAsFactors = FALSE) %>%
-    select(-"element_text")
+  sector2emiMkt <- gdx2::readGDX(gdx, "sector2emiMkt", stringsAsFactors = FALSE)
   # mapping from industry subsectors to industry CCS sectors
-  secInd37_2_emiInd37 <- gdx2::readGDX(gdx, "secInd37_2_emiInd37", stringsAsFactors = FALSE) %>%
-    select(-"element_text")
+  secInd37_2_emiInd37 <- gdx2::readGDX(gdx, "secInd37_2_emiInd37", stringsAsFactors = FALSE)
   # combinations of FE type, sector, market for which non-energy use exists
-  entyFe2sector2emiMkt_NonEn <- gdx2::readGDX(gdx, "entyFe2sector2emiMkt_NonEn", react = "silent", stringsAsFactors = FALSE) %>%
-    select(-"element_text")
+  entyFe2sector2emiMkt_NonEn <- gdx2::readGDX(gdx, "entyFe2sector2emiMkt_NonEn",
+                                              react = "silent", stringsAsFactors = FALSE)
   # technology sets
   teCCS <- gdx2::readGDX(gdx, "teCCS")
   teBio <- gdx2::readGDX(gdx, "teBio")
@@ -741,7 +733,7 @@ reportEmi <- function(gdx, output = NULL, regionSubsetList = NULL,
     all_enty = getItems(pm_emifac.co2.fe, dim = "all_enty", full = TRUE),
     all_enty1 = getItems(pm_emifac.co2.fe, dim = "all_enty1", full = TRUE)
   ) %>%
-    left_join(entyFe2Sector, by = "all_enty1", relationship = "many-to-many") %>%
+    left_join(entyFe2Sector, by = c("all_enty1" = "all_enty"), relationship = "many-to-many") %>%
     left_join(sector2emiMkt, by = "emi_sectors", relationship = "many-to-many")
 
   emi.map.fe <- emi.map.fe %>%
