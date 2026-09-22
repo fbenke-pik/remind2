@@ -456,9 +456,10 @@ reportSE <- function(gdx, regionSubsetList = NULL, t = c(seq(2005, 2060, 5), seq
   # electricity for fuel extraction, e.g. electricity used for oil and gas extraction
 
   # read in with restore_zero = F first, to get non-zero third dimension
-  pm_fuExtrOwnCons_reduced <- gdx::readGDX(gdx, "pm_fuExtrOwnCons", restore_zeros = FALSE)
+  pm_fuExtrOwnCons_reduced <- gdx2::readGDX(gdx, "pm_fuExtrOwnCons", restoreZeros = FALSE, uniqueStyle = "classic")
   # read in again with restore_zero = T to get all regions in case the parameter is zero for some regions
-  pm_fuExtrOwnCons <- gdx::readGDX(gdx, "pm_fuExtrOwnCons", restore_zeros = TRUE)[, , getNames(pm_fuExtrOwnCons_reduced)]
+  pm_fuExtrOwnCons <- gdx2::readGDX(gdx, "pm_fuExtrOwnCons",
+                                    restoreZeros = TRUE, uniqueStyle = "classic")[, , getNames(pm_fuExtrOwnCons_reduced)]
 
   vm_fuExtr <- gdx2::readGDX(gdx, "vm_fuExtr", select = list("_field" = "level"),
                              restoreZeros = FALSE)[, y, ]
