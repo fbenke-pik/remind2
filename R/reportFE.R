@@ -947,7 +947,7 @@ reportFE <- function(gdx, regionSubsetList = NULL,
 
   if (tran_mod == "edge_esm") {
     ## define the set that contains fe2es for transport
-    fe2es_dyn35 <- gdx2::readGDX(gdx, "fe2es_dyn35",)
+    fe2es_dyn35 <- gdx2::readGDX(gdx, "fe2es_dyn35")
 
     vm_demFeForEs_trnsp <- vm_demFeForEs[fe2es_dyn35]
 

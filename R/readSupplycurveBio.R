@@ -50,7 +50,7 @@ readSupplycurveBio <- function(outputdirs,
 
   # retrieve run titles
   for (i in seq_along(gdx_path)) {
-    names(gdx_path)[i] <- gdx2::readGDX(gdx_path[i], "c_expname", format = "first_found")
+    names(gdx_path)[i] <- gdx2::readGDX(gdx_path[i], name = "c_expname")
   }
 
   #########################################################################

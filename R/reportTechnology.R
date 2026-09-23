@@ -449,7 +449,7 @@ reportTechnology <- function(gdx, output = NULL, regionSubsetList = NULL,
 
   ## calculate totals of rocks weathering on fields in each period
   v33_EW_onfield_tot <- gdx2::readGDX(gdx, "v33_EW_onfield_tot", restoreZeros = FALSE,
-                                      select = list("_field" = "level"), format = "first_found")[, t, ] # [Gt rock]
+                                      select = list("_field" = "level"))[, t, ] # [Gt rock]
   v33_EW_onfield_tot_total <- dimSums(v33_EW_onfield_tot, dim = 3) # total of rocks weathering on fields  [Gt rock]
   v33_EW_onfield_tot_byClimateGrade <- dimSums(v33_EW_onfield_tot, dim = 3.2) # rocks weathering on field by climate grade, aggregated across transportation grades [Gt rock]
 

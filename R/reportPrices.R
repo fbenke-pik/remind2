@@ -61,7 +61,7 @@ reportPrices <- function(gdx, output = NULL, regionSubsetList = NULL,
   ####### conversion factors ##########
   s_GWP_CH4 <- as.numeric(gdx2::readGDX(gdx, c("sm_gwpCH4", "s_gwpCH4", "s_GWP_CH4"), format = "first_found", react = "silent"))
   s_GWP_N2O <- as.numeric(gdx2::readGDX(gdx, c("s_gwpN2O", "s_GWP_N2O"), format = "first_found", react = "silent"))
-  s_twa2mwh <- as.numeric(gdx2::readGDX(gdx, "sm_TWa_2_MWh", format = "first_found", react = "silent"))
+  s_twa2mwh <- as.numeric(gdx2::readGDX(gdx, "sm_TWa_2_MWh", react = "silent"))
   tdptwyr2dpgj <- 31.71 # TerraDollar per TWyear to Dollar per GJ
   p80_subset <- c("perm", "good", "peur", "peoil", "pegas", "pecoal", "pebiolc") # TODO: read in from gdx as sets trade
   ####### read in needed data #########
@@ -69,27 +69,27 @@ reportPrices <- function(gdx, output = NULL, regionSubsetList = NULL,
   #---- Functions
 
   ## parameter
-  shift_p <- gdx2::readGDX(gdx, name = "p30_pebiolc_pricshift", format = "first_found")[, t, ]
-  mult_p <- gdx2::readGDX(gdx, name = "p30_pebiolc_pricmult", format = "first_found")[, t, ]
-  pric_mag <- gdx2::readGDX(gdx, name = "p30_pebiolc_pricemag", format = "first_found")[, t, ]
-  pric_emu_pre <- gdx2::readGDX(gdx, name = "p30_pebiolc_price_emu_preloop", format = "first_found")[, t, ]
-  pric_emu_pre_shifted <- gdx2::readGDX(gdx, name = "p30_pebiolc_price_emu_preloop_shifted", format = "first_found")[, t, ]
-  bio_tax_factor <- gdx2::readGDX(gdx, name = "p21_tau_bioenergy_tax", format = "first_found", react = "silent")[, t, ]
-  if (is.null(bio_tax_factor)) bio_tax_factor <- gdx2::readGDX(gdx, name = "v21_tau_bio", select = list("_field" = "level"), format = "first_found")[, t, ]
+  shift_p <- gdx2::readGDX(gdx, name = "p30_pebiolc_pricshift")[, t, ]
+  mult_p <- gdx2::readGDX(gdx, name = "p30_pebiolc_pricmult")[, t, ]
+  pric_mag <- gdx2::readGDX(gdx, name = "p30_pebiolc_pricemag")[, t, ]
+  pric_emu_pre <- gdx2::readGDX(gdx, name = "p30_pebiolc_price_emu_preloop")[, t, ]
+  pric_emu_pre_shifted <- gdx2::readGDX(gdx, name = "p30_pebiolc_price_emu_preloop_shifted")[, t, ]
+  bio_tax_factor <- gdx2::readGDX(gdx, name = "p21_tau_bioenergy_tax", react = "silent")[, t, ]
+  if (is.null(bio_tax_factor)) bio_tax_factor <- gdx2::readGDX(gdx, name = "v21_tau_bio", select = list("_field" = "level"))[, t, ]
   pm_pvp <- gdx2::readGDX(gdx, name = c("pm_pvp", "p80_pvp"), format = "first_found")[, t, p80_subset]
-  pm_MPortsPrice <- gdx2::readGDX(gdx, name = c("pm_MPortsPrice"), format = "first_found")[, t, ]
-  pm_XPortsPrice <- gdx2::readGDX(gdx, name = c("pm_XPortsPrice"), format = "first_found")[, t, ]
+  pm_MPortsPrice <- gdx2::readGDX(gdx, name = "pm_MPortsPrice")[, t, ]
+  pm_XPortsPrice <- gdx2::readGDX(gdx, name = "pm_XPortsPrice")[, t, ]
   pm_taxCO2eq <- gdx2::readGDX(gdx, name = c("pm_taxCO2eq", "pm_tau_CO2_tax"), format = "first_found")[, t, ]
-  pm_taxCO2eqSum <- gdx2::readGDX(gdx, name = "pm_taxCO2eqSum", format = "first_found")[, t, ]
-  pm_taxCO2eqSCC <- gdx2::readGDX(gdx, name = "pm_taxCO2eqSCC", format = "first_found")[, t, ]
+  pm_taxCO2eqSum <- gdx2::readGDX(gdx, name = "pm_taxCO2eqSum")[, t, ]
+  pm_taxCO2eqSCC <- gdx2::readGDX(gdx, name = "pm_taxCO2eqSCC")[, t, ]
   p21_CO2TaxSectorMarkup <- gdx2::readGDX(gdx, name = c("p21_CO2TaxSectorMarkup", "p21_CO2_tax_sector_markup"), format = "first_found", react = "silent")
   if (dimExists("ttot", p21_CO2TaxSectorMarkup)) p21_CO2TaxSectorMarkup <- p21_CO2TaxSectorMarkup[, t, ]
-  pm_taxemiMkt <- gdx2::readGDX(gdx, name = "pm_taxemiMkt", format = "first_found", react = "silent")[, t, ]
-  p47_taxCO2eq_AggFE <- gdx2::readGDX(gdx, name = "p47_taxCO2eq_AggFE", format = "first_found", react = "silent")[, t, ]
-  p47_taxCO2eq_SectorAggFE <- gdx2::readGDX(gdx, name = "p47_taxCO2eq_SectorAggFE", format = "first_found", react = "silent")[, t, ]
+  pm_taxemiMkt <- gdx2::readGDX(gdx, name = "pm_taxemiMkt", react = "silent")[, t, ]
+  p47_taxCO2eq_AggFE <- gdx2::readGDX(gdx, name = "p47_taxCO2eq_AggFE", react = "silent")[, t, ]
+  p47_taxCO2eq_SectorAggFE <- gdx2::readGDX(gdx, name = "p47_taxCO2eq_SectorAggFE", react = "silent")[, t, ]
 
   ## variables
-  pric_emu <- gdx2::readGDX(gdx, name = "vm_pebiolc_price", select = list("_field" = "level"), format = "first_found")[, t, ]
+  pric_emu <- gdx2::readGDX(gdx, name = "vm_pebiolc_price", select = list("_field" = "level"))[, t, ]
 
   ## equations
   budget.m <- gdx2::readGDX(gdx, name = "qm_budget", type = "Equation",
@@ -98,8 +98,7 @@ reportPrices <- function(gdx, output = NULL, regionSubsetList = NULL,
                                 select = list("_field" = "marginal"), format = "first_found",
                                 restoreZeros = FALSE)[, t, ]
   esm2macro.m <- gdx2::readGDX(gdx, name = "q35_esm2macro", type = "Equation",
-                               select = list("_field" = "marginal"), format = "first_found",
-                               react = "silent")[, t, ]
+                               select = list("_field" = "marginal"), react = "silent")[, t, ]
   cm_startyear <- as.integer(gdx2::readGDX(gdx, name = "cm_startyear", format = "simplest"))
 
   #####################################

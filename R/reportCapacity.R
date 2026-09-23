@@ -39,8 +39,8 @@ reportCapacity <- function(gdx, regionSubsetList = NULL,
                                  restoreZeros = FALSE, format = "first_found", uniqueStyle = "classic")
 
   # read variables
-  vm_cap <- gdx2::readGDX(gdx, name = c("vm_cap"), select = list("_field" = "level"), format = "first_found") * 1000 # convert from TW to GW
-  vm_deltaCap <- gdx2::readGDX(gdx, name = c("vm_deltaCap"), select = list("_field" = "level"), format = "first_found") * 1000 # convert from TW to GW
+  vm_cap <- gdx2::readGDX(gdx, name = "vm_cap", select = list("_field" = "level")) * 1000 # convert from TW to GW
+  vm_deltaCap <- gdx2::readGDX(gdx, name = "vm_deltaCap", select = list("_field" = "level")) * 1000 # convert from TW to GW
   v_earlyreti <- gdx2::readGDX(gdx, name = c("vm_capEarlyReti", "v_capEarlyReti", "v_earlyreti"), select = list("_field" = "level"), format = "first_found")
 
   # read scalars
@@ -59,7 +59,7 @@ reportCapacity <- function(gdx, regionSubsetList = NULL,
   # the reporting template (all variables represent the average of the years from t-2.5years to t+2.5years)
   if (!is.null(gdx_ref)) {
     cm_startyear <- as.integer(gdx2::readGDX(gdx, name = "cm_startyear", format = "simplest"))
-    vm_deltaCapRef <- gdx2::readGDX(gdx_ref, name = c("vm_deltaCap"), select = list("_field" = "level"), format = "first_found") * 1000 # convert from TW to GW
+    vm_deltaCapRef <- gdx2::readGDX(gdx_ref, name = "vm_deltaCap", select = list("_field" = "level")) * 1000 # convert from TW to GW
     vm_deltaCapRef <- vm_deltaCapRef[teall2rlf]
     vm_deltaCapRef <- vm_deltaCapRef[, ttot, ]
     vm_deltaCap <- modifyInvestmentVariables(vm_deltaCap, vm_deltaCapRef, cm_startyear)
@@ -249,7 +249,7 @@ reportCapacity <- function(gdx, regionSubsetList = NULL,
     cap_solids <- mbind(cap_solids, setNames(dimSums(cap_solids, dim = 3), full_name("|Solids"))) # sum of the above
 
     # biochar
-    s_tBC_2_TWa <- gdx2::readGDX(gdx, name = "sm_tBC_2_TWa", format = "first_found", react = "silent") # Biochar calorific value
+    s_tBC_2_TWa <- gdx2::readGDX(gdx, name = "sm_tBC_2_TWa", react = "silent") # Biochar calorific value
     factor_biochar <- 1 / (s_tBC_2_TWa * 10^6 * 10^3) # convert from GWa to Mt Biochar: 1 / ([TWa/t BC] * 10^6 [t BC/ Mt BC] * 10^3 [GW/TW]) = 1 / [GWa/MtBC] = [Mt BC/ GWa]
     unit_biochar <- ifelse(prefix == "Cap", " (Mt Biochar/yr)", " (Mt Biochar/yr/yr)") # determine the relevant unit
     cap_biochar <- setNames(

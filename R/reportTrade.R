@@ -32,11 +32,11 @@ reportTrade <- function(gdx, regionSubsetList = NULL, t = c(seq(2005, 2060, 5), 
   C_2_CO2 <- 44 / 12
   sm_tdptwyr2dpgj <- 31.71 # TerraDollar per TWyear to Dollar per GJ
 
-  pm_eta_conv <- gdx2::readGDX(gdx, name = c("pm_eta_conv"), format = "first_found")
+  pm_eta_conv <- gdx2::readGDX(gdx, name = "pm_eta_conv")
   p_costsPEtradeMp <- gdx2::readGDX(gdx, name = c("pm_costsPEtradeMp", "p_costsPEtradeMp"), format = "first_found")
-  pm_pvp <- gdx2::readGDX(gdx, name = c("pm_pvp"), format = "first_found")
-  Xport <- gdx2::readGDX(gdx, name = c("vm_Xport"), select = list("_field" = "level"), format = "first_found")
-  Mport <- gdx2::readGDX(gdx, name = c("vm_Mport"), select = list("_field" = "level"), format = "first_found")
+  pm_pvp <- gdx2::readGDX(gdx, name = "pm_pvp")
+  Xport <- gdx2::readGDX(gdx, name = "vm_Xport", select = list("_field" = "level"))
+  Mport <- gdx2::readGDX(gdx, name = "vm_Mport", select = list("_field" = "level"))
 
   # calculate maximal temporal resolution
   y <- Reduce(intersect, list(getYears(pm_pvp), getYears(Xport)))
@@ -46,7 +46,7 @@ reportTrade <- function(gdx, regionSubsetList = NULL, t = c(seq(2005, 2060, 5), 
   pm_eta_conv <- pm_eta_conv[, y, ]
 
   # AJS for current account
-  set_trade <- gdx2::readGDX(gdx, name = c("trade"), type = "Set", format = "first_found")
+  set_trade <- gdx2::readGDX(gdx, name = "trade", type = "Set")
 
   tradeMacro <- gdx2::readGDX(gdx, "tradeMacro")
   tradePe <- gdx2::readGDX(gdx, "tradePe")
