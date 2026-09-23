@@ -11,7 +11,6 @@
 #'
 #' @importFrom dplyr summarise group_by mutate filter distinct case_when
 #' @importFrom quitte as.quitte
-#' @importFrom data.table :=
 #' @importFrom mip plotstyle
 #' @importFrom ggplot2 scale_y_continuous scale_x_continuous scale_y_discrete scale_fill_manual scale_color_manual
 #' @importFrom ggplot2 coord_cartesian aes_ geom_rect theme geom_point geom_hline
@@ -612,9 +611,9 @@ plotNashConvergence <- function(gdx) { # nolint cyclocomp_linter
     module2realisation <- gdx2::readGDX(gdx, name = "module2realisation", react = "error")
     if (module2realisation[module2realisation$modules == "internalizeDamages", ][, 2] != "off") {
       cmSccConvergence <- as.numeric(gdx2::readGDX(gdx, name = "cm_sccConvergence",
-                                                   types = c("parameters"), react = "error"))
+                                                   type = "Parameter", react = "error"))
       cmTempConvergence <- as.numeric(gdx2::readGDX(gdx, name = "cm_tempConvergence",
-                                                    types = c("parameters"), react = "error"))
+                                                    type = "Parameter", react = "error"))
       p80SccConvergenceMaxDeviationIter <- gdx2::readGDX(gdx, name = "p80_sccConvergenceMaxDeviation_iter",
                                                          react = "error") %>%
         as.quitte() %>%

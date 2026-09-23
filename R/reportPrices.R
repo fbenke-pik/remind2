@@ -118,7 +118,7 @@ reportPrices <- function(gdx, output = NULL, regionSubsetList = NULL,
     }
   }
 
-  module2realisation <- gdx2::readGDX(gdx, "module2realisation")
+  module2realisation <- gdx2::readGDX(gdx, "module2realisation", stringsAsFactors = FALSE)
   rownames(module2realisation) <- module2realisation$modules
 
   pm_FEPrice <- gdx2::readGDX(gdx, "pm_FEPrice")

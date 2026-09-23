@@ -66,28 +66,27 @@ reportFE <- function(gdx, regionSubsetList = NULL,
     select(-"all_te")
 
   # ---- parameter
-  p_eta_conv <- gdx2::readGDX(gdx, c("pm_eta_conv"), restoreZeros = FALSE, format = "first_found")[, t, ]
+  p_eta_conv <- gdx2::readGDX(gdx, "pm_eta_conv", restoreZeros = FALSE)[, t, ]
 
   # ---- variables
   vm_prodSe <- gdx2::readGDX(gdx,
-                       name = c("vm_prodSe", "v_seprod"), select = list("_field" = "level"),
-                       restoreZeros = FALSE, format = "first_found", uniqueStyle = "classic"
+                             name = c("vm_prodSe", "v_seprod"), select = list("_field" = "level"),
+                             restoreZeros = FALSE, format = "first_found", uniqueStyle = "classic"
   )[, t, ] * TWa_2_EJ
   vm_prodFe <- gdx2::readGDX(gdx,
-                       name = c("vm_prodFe"), select = list("_field" = "level"),
-                       restoreZeros = FALSE, format = "first_found", uniqueStyle = "classic"
+                             name = "vm_prodFe", select = list("_field" = "level"),
+                             restoreZeros = FALSE, uniqueStyle = "classic"
   )[, t, ] * TWa_2_EJ
   vm_demFeSector <- gdx2::readGDX(gdx,
-                            name = c("vm_demFeSector"), select = list("_field" = "level"),
-                            restoreZeros = FALSE, format = "first_found", uniqueStyle = "classic"
-  )[, t, ] * TWa_2_EJ
+                                  name = "vm_demFeSector", select = list("_field" = "level"),
+                                  restoreZeros = FALSE, uniqueStyle = "classic")[, t, ] * TWa_2_EJ
   vm_demFeSector[is.na(vm_demFeSector)] <- 0
 
   # FE non-energy use
   vm_demFENonEnergySector <- gdx2::readGDX(gdx, "vm_demFENonEnergySector",
-                                     select = list("_field" = "level"),
-                                     spatial = 2, restoreZeros = FALSE,
-                                     react = "silent", uniqueStyle = "classic"
+                                           select = list("_field" = "level"),
+                                           spatial = 2, restoreZeros = FALSE,
+                                           react = "silent", uniqueStyle = "classic"
   )[, t, ] * TWa_2_EJ
 
   # only retain combinations of SE, FE, sector, and emiMkt which actually exist in the model (see qm_balFe)
@@ -98,7 +97,7 @@ reportFE <- function(gdx, regionSubsetList = NULL,
 
   # FE demand per industry subsector
   o37_demFeIndSub <- gdx2::readGDX(gdx, "o37_demFeIndSub", restoreZeros = FALSE,
-                             format = "first_found", react = "silent", uniqueStyle = "classic"
+                                   react = "silent", uniqueStyle = "classic"
   )
   o37_demFeIndSub <- o37_demFeIndSub[, t, ]
   o37_demFeIndSub[is.na(o37_demFeIndSub)] <- 0
@@ -109,7 +108,7 @@ reportFE <- function(gdx, regionSubsetList = NULL,
   ####### Realisation specific Variables ##########
 
   # Define current realisation for the different modules
-  module2realisation <- gdx2::readGDX(gdx, "module2realisation")
+  module2realisation <- gdx2::readGDX(gdx, "module2realisation", stringsAsFactors = FALSE)
   rownames(module2realisation) <- module2realisation$modules
 
   find_real_module <- function(module_set, module_name) {
@@ -513,19 +512,19 @@ reportFE <- function(gdx, regionSubsetList = NULL,
 
   # ---- variables
   if (tran_mod == "edge_esm") {
-    vm_demFeForEs <- gdx2::readGDX(gdx, name = c("vm_demFeForEs"), select = list("_field" = "level"), restoreZeros = FALSE, format = "first_found", react = "silent")[, t, ] * TWa_2_EJ
+    vm_demFeForEs <- gdx2::readGDX(gdx, name = "vm_demFeForEs", select = list("_field" = "level"), restoreZeros = FALSE, react = "silent")[, t, ] * TWa_2_EJ
   }
 
   # CES nodes, convert from TWa to EJ
-  vm_cesIO <- gdx2::readGDX(gdx, name = c("vm_cesIO"),
-                            select = list("_field" = "level"), restoreZeros = FALSE, format = "first_found")[, t, ] * TWa_2_EJ
+  vm_cesIO <- gdx2::readGDX(gdx, name = "vm_cesIO", select = list("_field" = "level"),
+                            restoreZeros = FALSE)[, t, ] * TWa_2_EJ
 
   if (any_process_based) {
-    o37_demFePrc <- gdx2::readGDX(gdx, name = c("o37_demFePrc"), restoreZeros = FALSE, format = "first_found")[, t, ] * TWa_2_EJ
+    o37_demFePrc <- gdx2::readGDX(gdx, name = "o37_demFePrc", restoreZeros = FALSE)[, t, ] * TWa_2_EJ
     o37_demFePrc[is.na(o37_demFePrc)] <- 0.
-    o37_ProdIndRoute <- gdx2::readGDX(gdx, name = c("o37_ProdIndRoute"), restoreZeros = FALSE, format = "first_found", react = "silent")[, t, ]
+    o37_ProdIndRoute <- gdx2::readGDX(gdx, name = "o37_ProdIndRoute", restoreZeros = FALSE, react = "silent")[, t, ]
     o37_ProdIndRoute[is.na(o37_ProdIndRoute)] <- 0.
-    o37_demFeIndRoute <- gdx2::readGDX(gdx, name = c("o37_demFeIndRoute"), restoreZeros = FALSE, format = "first_found", react = "silent")[, t, ] * TWa_2_EJ
+    o37_demFeIndRoute <- gdx2::readGDX(gdx, name = "o37_demFeIndRoute", restoreZeros = FALSE, react = "silent")[, t, ] * TWa_2_EJ
     o37_demFeIndRoute[is.na(o37_demFeIndRoute)] <- 0.
     # mapping of process to output materials
     tePrc2ue <- gdx2::readGDX(gdx, "tePrc2ue", restoreZeros = FALSE)
@@ -948,7 +947,7 @@ reportFE <- function(gdx, regionSubsetList = NULL,
 
   if (tran_mod == "edge_esm") {
     ## define the set that contains fe2es for transport
-    fe2es_dyn35 <- gdx2::readGDX(gdx, c("fe2es_dyn35"), format = "first_found")
+    fe2es_dyn35 <- gdx2::readGDX(gdx, "fe2es_dyn35",)
 
     vm_demFeForEs_trnsp <- vm_demFeForEs[fe2es_dyn35]
 

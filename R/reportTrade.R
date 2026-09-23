@@ -25,7 +25,7 @@
 reportTrade <- function(gdx, regionSubsetList = NULL, t = c(seq(2005, 2060, 5), seq(2070, 2110, 10), 2130, 2150)) {
 
   ####### get realisations #########
-  module2realisation <- gdx2::readGDX(gdx, "module2realisation")
+  module2realisation <- gdx2::readGDX(gdx, "module2realisation", stringsAsFactors = FALSE)
   rownames(module2realisation) <- module2realisation$modules
 
   TWa_2_EJ <- 3600 * 24 * 365 / 1e6

@@ -27,7 +27,7 @@ reportEmiForClimateAssessment <- function(gdx, output = NULL, regionSubsetList =
   # Read Data from GDX ----
 
   ####### get realisations #########
-  module2realisation <- gdx2::readGDX(gdx, "module2realisation")
+  module2realisation <- gdx2::readGDX(gdx, "module2realisation", stringsAsFactors = FALSE)
   rownames(module2realisation) <- module2realisation$modules
 
   # unit conversion parameters needed

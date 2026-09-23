@@ -35,7 +35,7 @@ reportMacroEconomy <- function(gdx,
 
   steel_process_based <- "steel" %in% gdx2::readGDX(gdx, "secInd37Prc", react = "silent")
   cons <- setNames(
-    gdx2::readGDX(gdx, name = "vm_cons", select = list("_field" = "level"), format = "first_found")[, t, ] * 1000,
+    gdx2::readGDX(gdx, name = "vm_cons", select = list("_field" = "level"))[, t, ] * 1000,
     "Consumption (billion US$2017/yr)"
   )
   gdp <- setNames(vm_cesIO[, , "inco"] * 1000, "GDP|MER (billion US$2017/yr)")
@@ -63,7 +63,7 @@ reportMacroEconomy <- function(gdx,
                           "GDP|PPP|Net_afterDamages (billion US$2017/yr)")
 
   ies <- gdx2::readGDX(gdx, c("pm_ies", "p_ies"), format = "first_found")
-  c_damage <- gdx2::readGDX(gdx, "cm_damage", "c_damage", format = "first_found", react = "silent")
+  c_damage <- gdx2::readGDX(gdx, c("cm_damage", "c_damage"), format = "first_found", react = "silent")
   if (is.null(c_damage)) c_damage <- 0
   forcOs <- gdx2::readGDX(gdx, "vm_forcOs", select = list("_field" = "level"), react = "silent")[, t, ]
   if (is.null(forcOs)) forcOs <- 0
